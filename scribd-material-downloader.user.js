@@ -11,11 +11,11 @@
 // ==/UserScript==
 
 (function() {
-    'use strict';
+    'use strict'; 
 
     // Load local jsPDF from GitHub
     const jsPDFScript = document.createElement('script');
-    jsPDFScript.src = 'https://raw.githubusercontent.com/Angesom12/scribd-downloader-assets/main/js/jspdf.umd.min.js';
+	jsPDFScript.src = 'https://cdn.jsdelivr.net/gh/Angesom12/scribd-material-downloader/js/jspdf.umd.min.js';
     jsPDFScript.onload = () => initDownloader();
     document.head.appendChild(jsPDFScript);
 
