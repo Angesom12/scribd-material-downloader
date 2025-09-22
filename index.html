@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Scribd Material Downloader (Safe PDF)</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+
+  <!-- Include jsPDF locally from GitHub -->
+  <script src="https://raw.githubusercontent.com/Angesom12/scribd-downloader-assets/main/js/jspdf.umd.min.js"></script>
+
+  <style>
+    body {
+      font-family: system-ui, Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: transparent; /* blend when injected */
+    }
+    .button-container {
+      position: fixed;
+      top: 50%;
+      right: 40px;
+      transform: translateY(-50%);
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      z-index: 100000;
+    }
+    .dl-btn {
+      padding: 14px 24px;
+      font-size: 16px;
+      font-weight: bold;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      color: #fff;
+      box-shadow: 0 3px 6px rgba(0,0,0,0.25);
+      transition: transform 0.2s, opacity 0.2s;
+    }
+    .dl-btn:hover {
+      transform: scale(1.1);
+      opacity: 0.9;
+    }
+    .btn-view   { background-color: #27ae60; }  /* green */
+    .btn-txt    { background-color: #f39c12; }  /* orange */
+    .btn-pdf    { background-color: #8e44ad; }  /* purple */
+  </style>
+</head>
+<body>
+  <div class="button-container">
+    <button class="dl-btn btn-view">View Full</button>
+    <button class="dl-btn btn-txt">Download (TXT)</button>
+    <button class="dl-btn btn-pdf">Download (PDF)</button>
+  </div>
+
+  <script>
+    // --- View Full ---
+    function redirectToEmbed() {
+      const currentUrl = window.location.href;
+      const regex = /https:\/\/www\.scribd\.com\/[^/]+\/([^/]+)\/[^/]+/;
+      const match = currentUrl.match(regex);
+      if (match) {
+        const newUrl = `https://www.scribd.com/embeds/${match[1]}/content`;
+        window.location.href = newUrl;
+      } else {
+        alert("Unable to open embed view. Please refresh the page.");
+      }
+    }
+
+    // --- Download TXT ---
+    function downloadContent() {
+      const contentElements = document.querySelectorAll('.text_layer .a');
+      let content = '';
+      contentElements.forEach(el => content += el.textContent + '\n');
+      if (!content.trim()) {
+        alert("No content found. Try opening the Scribd embed view first.");
+        return;
+      }
+      const blob = new Blob([content], { type: 'text/plain' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'scribd_material.txt';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+
+    // --- Download PDF (local) ---
+    function downloadContentAsPDF() {
+      const contentElements = document.querySelectorAll('.text_layer .a');
+      let content = '';
+      contentElements.forEach(el => content += el.textContent + '\n');
+
+      if (!content.trim()) {
+        alert("No content found. Try opening the Scribd embed view first.");
+        return;
+      }
+
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+      const lines = content.split('\n');
+      let y = 10;
+
+      lines.forEach(line => {
+        if (y > 280) { // page limit
+          doc.addPage();
+          y = 10;
+        }
+        doc.text(line, 10, y);
+        y += 7; // line height
+      });
+
+      doc.save('scribd_material.pdf');
+    }
+
+    // --- Bind Buttons ---
+    document.querySelector('.btn-view').addEventListener('click', redirectToEmbed);
+    document.querySelector('.btn-txt').addEventListener('click', downloadContent);
+    document.querySelector('.btn-pdf').addEventListener('click', downloadContentAsPDF);
+  </script>
+</body>
+</html>
