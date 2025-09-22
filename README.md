@@ -24,7 +24,7 @@ The **Scribd Material Downloader** is a lightweight userscript that removes rest
 
 ### From GitHub
 1. Install a userscript manager if you haven’t already.  
-2. Open the raw file from this repository: `scribd-material-downloader.user.js`.  
+2. Open the raw file from this repository: [scribd-material-downloader.user.js](https://raw.githubusercontent.com/Angesom12/scribd-material-downloader/main/scribd-material-downloader.user.js).  
 3. Click **Install** in your userscript manager.
 
 ---
@@ -54,3 +54,4 @@ The **Scribd Material Downloader** is a lightweight userscript that removes rest
 ## License
 
 This project is licensed under the **MIT License**.
+
