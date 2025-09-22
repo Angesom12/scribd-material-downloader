@@ -88,7 +88,7 @@
 
     // --- Download PDF (local) ---
     function downloadContentAsPDF() {
-      const contentElements = document.querySelectorAll('.text_layer .a');
+      const contentElements = document.querySelectorAll('.text_layer .a').length;
       let content = '';
       contentElements.forEach(el => content += el.textContent + '\n');
 
